@@ -14,28 +14,27 @@ void generate_signal(fftw_complex* signal, const int N) {
 	}
 }
 
-static void fftw(benchmark::State& state) {
+static void fftw3(benchmark::State& state) {
 	int N = state.range(0);
-
 	for (auto _ : state) {
-		fftw_complex signal[N];
-		fftw_complex result[N];
+		fftw_complex *in, *out;
+		in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
 		state.PauseTiming();
-		generate_signal(signal, N);
+		generate_signal(in, N);
 		state.ResumeTiming();
-
-		fftw_plan plan = fftw_plan_dft_1d(N, signal, result, FFTW_FORWARD,
-				FFTW_ESTIMATE);
+		out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+		fftw_plan plan = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 		fftw_execute(plan);
 		fftw_destroy_plan(plan);
+		fftw_free(in);
+		fftw_free(out);
 	}
-
+	state.SetItemsProcessed(static_cast<int64_t>(state.iterations()) * N);
 	state.SetBytesProcessed(
 			static_cast<int64_t>(state.iterations()) * N
 					* sizeof(fftw_complex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(fftw)->RangeMultiplier(2)->Range(1<<10, 1<<17)->Complexity();
+BENCHMARK(fftw3)->RangeMultiplier(2)->Range(1<<10, 1<<22)->Complexity();
 BENCHMARK_MAIN();
-
 
