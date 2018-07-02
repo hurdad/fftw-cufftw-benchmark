@@ -1,6 +1,6 @@
 CC      = g++
 CFLAGS  = -std=c++11 -O0 -g -Wall -Wextra -Wshadow -pedantic -I/usr/local/cuda-9.2/targets/x86_64-linux/include/
-LDFLAGS = -L=/usr/local/cuda-9.2/targets/x86_64-linux/lib/
+LDFLAGS = -L=/usr/local/cuda-9.2/targets/x86_64-linux/lib/ -lbenchmark
 
 all: fftw-benchmark cufftw-benchmark
 
