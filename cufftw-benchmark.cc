@@ -35,7 +35,7 @@ static void cu_fftw(benchmark::State& state) {
 					* sizeof(fftw_complex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<22)->Complexity();
+BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
 BENCHMARK_MAIN();
 
 

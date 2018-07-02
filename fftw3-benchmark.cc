@@ -1,4 +1,4 @@
-#include <fftw3.h>
+	#include <fftw3.h>
 #include <benchmark/benchmark.h>
 #include <math.h>
 
@@ -35,6 +35,6 @@ static void fftw3(benchmark::State& state) {
 					* sizeof(fftw_complex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(fftw3)->RangeMultiplier(2)->Range(1<<10, 1<<22)->Complexity();
+BENCHMARK(fftw3)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
 BENCHMARK_MAIN();
 
