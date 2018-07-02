@@ -14,7 +14,7 @@ void generate_signal(fftw_complex* signal, const int N) {
 	}
 }
 
-static void fftw(benchmark::State& state) {
+static void cu_fftw(benchmark::State& state) {
 	int N = state.range(0);
 
 	for (auto _ : state) {
@@ -35,7 +35,7 @@ static void fftw(benchmark::State& state) {
 					* sizeof(fftw_complex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(fftw)->RangeMultiplier(2)->Range(1<<10, 1<<17)->Complexity();
+BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<17)->Complexity();
 BENCHMARK_MAIN();
 
 
