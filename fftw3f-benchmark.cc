@@ -5,7 +5,7 @@
 #define REAL 0
 #define IMAG 1
 
-void generate_signal(fftw_complex* signal, const int N) {
+void generate_signal(fftwf_complex* signal, const int N) {
 	int i;
 	for (i = 0; i < N; ++i) {
 		double theta = (double) i / (double) N * M_PI;
@@ -14,27 +14,27 @@ void generate_signal(fftw_complex* signal, const int N) {
 	}
 }
 
-static void fftw3(benchmark::State& state) {
+static void fftwf(benchmark::State& state) {
 	int N = state.range(0);
 	for (auto _ : state) {
-		fftw_complex *in, *out;
-		in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+		fftwf_complex *in, *out;
+		in = (fftwf_complex*) fftwf_malloc(sizeof(fftwf_complex) * N);
 		state.PauseTiming();
 		generate_signal(in, N);
 		state.ResumeTiming();
-		out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-		fftw_plan plan = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-		fftw_execute(plan);
-		fftw_destroy_plan(plan);
-		fftw_free(in);
-		fftw_free(out);
+		out = (fftwf_complex*) fftwf_malloc(sizeof(fftwf_complex) * N);
+		fftwf_plan plan = fftwf_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		fftwf_execute(plan);
+		fftwf_destroy_plan(plan);
+		fftwf_free(in);
+		fftwf_free(out);
 	}
 	state.SetItemsProcessed(static_cast<int64_t>(state.iterations()) * N);
 	state.SetBytesProcessed(
 			static_cast<int64_t>(state.iterations()) * N
-					* sizeof(fftw_complex));
+					* sizeof(fftwf_complex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(fftw3)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
+BENCHMARK(fftwf)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
 BENCHMARK_MAIN();
 
