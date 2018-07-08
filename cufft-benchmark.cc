@@ -19,39 +19,39 @@ void generate_signal(cufftComplex* signal, const int N) {
 
 static void cu_fftw(benchmark::State& state) {
 	int N = state.range(0);
-
 	for (auto _ : state) {
-
-//		findCudaDevice(argc, (const char **)argv);
 
 		// Allocate host memory for the signal
 		cufftComplex *h_signal = (cufftComplex *)malloc(sizeof(cufftComplex) * N);
-		cufftComplex *h_reversed_signal = (cufftComplex *)malloc(sizeof(cufftComplex) * N);
+		cufftComplex *h_fft = (cufftComplex *)malloc(sizeof(cufftComplex) * N);
 
 		// Initalize the memory for the signal
 		state.PauseTiming();
 		generate_signal(h_signal, N);
 		state.ResumeTiming();
 
+		//  Allocate complex signal GPU device memory
 		cufftComplex *d_signal;
 		checkCudaErrors(cudaMalloc((void **)&d_signal, N*sizeof(cufftComplex)));
+		
 		// Copy host memory to device
 		checkCudaErrors(cudaMemcpy(d_signal, h_signal, N*sizeof(cufftComplex), cudaMemcpyHostToDevice));
 		cufftHandle plan;
 		checkCudaErrors(cufftPlan1d(&plan, N, CUFFT_C2C, 1));
 
-		// Transform signal and kernel
-		printf("Transforming signal cufftExecC2C\n");
+		// Transform signal to fft (inplace)
 		checkCudaErrors(cufftExecC2C(plan, (cufftComplex *)d_signal, (cufftComplex *)d_signal, CUFFT_FORWARD));
-		getLastCudaError("Kernel execution failed [ ComplexPointwiseMulAndScale ]");
-		// Transform signal back
-		printf("Transforming signal back cufftExecC2C\n");
-		checkCudaErrors(cufftExecC2C(plan, (cufftComplex *)d_signal, (cufftComplex *)d_signal, CUFFT_INVERSE));
 
-		// Copy device memory to host
-		checkCudaErrors(cudaMemcpy(h_reversed_signal, d_signal, N*sizeof(cufftComplex),
-	                               cudaMemcpyDeviceToHost));
-
+		// Copy device memory to host fft
+		checkCudaErrors(cudaMemcpy(h_fft, d_signal, N*sizeof(cufftComplex), cudaMemcpyDeviceToHost));
+			
+		// Destroy CUFFT context
+		checkCudaErrors(cufftDestroy(plan));
+				   
+		// cleanup memory
+		checkCudaErrors(cudaFree(d_signal));
+		free(h_signal);
+		free(h_fft);
 	}
 	state.SetItemsProcessed(static_cast<int64_t>(state.iterations()) * N);
 	state.SetBytesProcessed(
