@@ -3,7 +3,7 @@ CFLAGS  = -std=c++11 -O0 -g -Wall -Wextra -Wshadow -pedantic -I/usr/local/cuda-9
 
 LDFLAGS = -L=/usr/local/cuda-9.2/targets/x86_64-linux/lib/ -lbenchmark -lm
 
-all: fftw3-benchmark fftw3f-benchmark fftw3l-benchmark cufftw-benchmark cufft-benchmark
+all: fftw3-benchmark fftw3f-benchmark fftw3l-benchmark cufftw-benchmark cufftwf-benchmark cufft-single-benchmark cufft-double-benchmark
 
 fftw3-benchmark: fftw3-benchmark.o
 	$(CC) -o $@ $^ $(LDFLAGS) -lfftw3
@@ -29,13 +29,25 @@ cufftw-benchmark: cufftw-benchmark.o
 cufftw-benchmark.o: cufftw-benchmark.cc
 	$(CC) -c $(CFLAGS) $<
 	
-cufft-benchmark: cufft-benchmark.o
+cufftwf-benchmark: cufftwf-benchmark.o
+	$(CC) -o $@ $^ $(LDFLAGS) -lcufftw
+
+cufftwf-benchmark.o: cufftwf-benchmark.cc
+	$(CC) -c $(CFLAGS) $<
+	
+cufft-single-benchmark: cufft-single-benchmark.o
 	$(CC) -o $@ $^ $(LDFLAGS) -lcufft -lcudart
 
-cufft-benchmark.o: cufft-benchmark.cc
+cufft-single-benchmark.o: cufft-single-benchmark.cc
+	$(CC) -c $(CFLAGS) $<
+	
+cufft-double-benchmark: cufft-double-benchmark.o
+	$(CC) -o $@ $^ $(LDFLAGS) -lcufft -lcudart
+
+cufft-double-benchmark.o: cufft-double-benchmark.cc
 	$(CC) -c $(CFLAGS) $<
 
 .PHONY: clean
 
 clean:
-	rm *.o fftw3-benchmark fftw3f-benchmark fftw3l-benchmark cufftw-benchmark cufft-benchmark
+	rm *.o fftw3-benchmark fftw3f-benchmark fftw3l-benchmark cufftw-benchmark cufftwf-benchmark cufft-single-benchmark cufft-double-benchmark

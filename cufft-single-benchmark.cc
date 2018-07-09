@@ -1,4 +1,3 @@
-
 #include <cuda_runtime.h>
 #include <cufft.h>
 #include <helper_cuda.h>
