@@ -16,7 +16,7 @@ void generate_signal(cufftComplex* signal, const int N) {
 	}
 }
 
-static void cu_fftw(benchmark::State& state) {
+static void cu_fft_single(benchmark::State& state) {
 	int N = state.range(0);
 	for (auto _ : state) {
 
@@ -58,7 +58,7 @@ static void cu_fftw(benchmark::State& state) {
 					* sizeof(cufftComplex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
+BENCHMARK(cu_fft_single)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
 BENCHMARK_MAIN();
 
 

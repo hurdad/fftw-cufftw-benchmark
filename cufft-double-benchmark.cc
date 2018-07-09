@@ -16,7 +16,7 @@ void generate_signal(cuDoubleComplex* signal, const int N) {
 	}
 }
 
-static void cu_fftw(benchmark::State& state) {
+static void cu_fft_double(benchmark::State& state) {
 	int N = state.range(0);
 	for (auto _ : state) {
 
@@ -36,7 +36,7 @@ static void cu_fftw(benchmark::State& state) {
 		// Copy host memory to device
 		checkCudaErrors(cudaMemcpy(d_signal, h_signal, N*sizeof(cuDoubleComplex), cudaMemcpyHostToDevice));
 		cufftHandle plan;
-		checkCudaErrors(cufftPlan1d(&plan, N, CUFFT_C2C, 1));
+		checkCudaErrors(cufftPlan1d(&plan, N, CUFFT_Z2Z, 1));
 
 		// Transform signal to fft (inplace)
 		checkCudaErrors(cufftExecZ2Z(plan, (cuDoubleComplex *)d_signal, (cuDoubleComplex *)d_signal, CUFFT_FORWARD));
@@ -58,7 +58,7 @@ static void cu_fftw(benchmark::State& state) {
 					* sizeof(cuDoubleComplex));
 	state.SetComplexityN(N);
 }
-BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
+BENCHMARK(cu_fft_double)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
 BENCHMARK_MAIN();
 
 
