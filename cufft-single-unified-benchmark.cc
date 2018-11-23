@@ -17,36 +17,32 @@ void generate_signal(cufftComplex* signal, const int N) {
   }
 }
 
-static void cu_fft_single(benchmark::State& state) {
+static void cu_fft_single_unified(benchmark::State& state) {
   int N = state.range(0);
 
-  // Allocate host memory for the signal and result
-  cufftComplex *h_signal = (cufftComplex *) malloc(sizeof(cufftComplex) * N);
-  cufftComplex *h_fft = (cufftComplex *) malloc(sizeof(cufftComplex) * N);
+  // Allocate host memory for the signal
+  cufftComplex *signal = (cufftComplex *) malloc(sizeof(cufftComplex) * N);
+  cufftComplex *in, *out;
+  checkCudaErrors(cudaMallocManaged(&in, sizeof(cufftComplex) * N));
+  checkCudaErrors(cudaMallocManaged(&out, sizeof(cufftComplex) * N));
 
-  //  Allocate complex signal GPU device memory
-  cufftComplex *d_signal;
-  checkCudaErrors(cudaMalloc((void ** )&d_signal, N * sizeof(cufftComplex)));
-
-  //  Init CUFFT Plan
+  //  Init fftw plan
   cufftHandle plan;
   checkCudaErrors(cufftPlan1d(&plan, N, CUFFT_C2C, 1));
 
   //  Generate signal
-  generate_signal(h_signal, N);
+  generate_signal(signal, N);
 
   for (auto _ : state) {
     //  Start iteration timer
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Copy host memory to device
-    checkCudaErrors(cudaMemcpy(d_signal, h_signal, N * sizeof(cufftComplex), cudaMemcpyHostToDevice));
+    // Copy signal into input of fft
+    memcpy(in, signal, sizeof(cufftComplex) * N);
 
-    // Transform signal to fft (inplace)
-    checkCudaErrors(cufftExecC2C(plan, (cufftComplex *)d_signal, (cufftComplex *)d_signal, CUFFT_FORWARD));
-
-    // Copy device memory to host fft
-    checkCudaErrors(cudaMemcpy(h_fft, d_signal, N * sizeof(cufftComplex), cudaMemcpyDeviceToHost));
+    // Transform signal to time
+    checkCudaErrors(cufftExecC2C(plan, (cufftComplex *)in, (cufftComplex *)out, CUFFT_FORWARD));
+    cudaDeviceSynchronize();
 
     //  Calculate elapsed time
     auto elapsed_seconds = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - start);
@@ -59,15 +55,15 @@ static void cu_fft_single(benchmark::State& state) {
   checkCudaErrors(cufftDestroy(plan));
 
   // Cleanup memory
-  checkCudaErrors(cudaFree(d_signal));
-  free(h_signal);
-  free(h_fft);
+  free(signal);
+  checkCudaErrors(cudaFree(in));
+  checkCudaErrors(cudaFree(out));
 
   //  Save statistics
   state.SetItemsProcessed(static_cast<int64_t>(state.iterations()) * N);
   state.SetBytesProcessed(static_cast<int64_t>(state.iterations()) * N * sizeof(cufftComplex));
   state.SetComplexityN(N);
 }
-BENCHMARK(cu_fft_single)->RangeMultiplier(2)->Range(1<<10, 1<<20)->Complexity()->UseManualTime();
+BENCHMARK(cu_fft_single_unified)->RangeMultiplier(2)->Range(1<<10, 1<<20)->Complexity()->UseManualTime();
 BENCHMARK_MAIN();
 
