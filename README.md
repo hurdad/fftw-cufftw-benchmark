@@ -37,7 +37,8 @@ make
  * NVIDIA GTX 1080
  
 ### cufft-single-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:07:03
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 -------------------------------------------------------------------------
@@ -58,7 +59,8 @@ cu_fft_single_BigO                      2.01 N       2.01 N
 cu_fft_single_RMS                          6 %          6 % 
 ```
 ### cufft-single-unified-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:07:14
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 ---------------------------------------------------------------------------------
@@ -79,7 +81,8 @@ cu_fft_single_unified_BigO                      3.65 N       3.63 N
 cu_fft_single_unified_RMS                         34 %         24 % 
 ```
 ### cufft-double-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:07:26
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 --------------------------------------------------------------------------
@@ -106,7 +109,8 @@ cu_fft_double_BigO                       0.29 NlgN       0.29 NlgN
 cu_fft_double_RMS                          35 %         35 % 
 ```
 ### cufftw-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:07:56
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 --------------------------------------------------------------------
@@ -155,7 +159,8 @@ cu_fftwf_BigO                      0.14 NlgN       0.14 NlgN
 cu_fftwf_RMS                          6 %          6 % 
 ```
 ### fftw3f-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:09:06
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 -----------------------------------------------------------------
@@ -176,7 +181,8 @@ fftwf_BigO                      0.00 N^2       0.00 N^2
 fftwf_RMS                         17 %         17 % 
 ```
 ### fftw3-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:08:36
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 ------------------------------------------------------
@@ -203,7 +209,8 @@ fftw3_BigO           3.39 NlgN       3.39 NlgN
 fftw3_RMS              30 %         30 % 
 ```
 ### fftw3l-benchmark
-```Run on (8 X 4200 MHz CPU s)
+```
+Run on (8 X 4200 MHz CPU s)
 2018-12-08 17:14:00
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 -----------------------------------------------------------------
