@@ -1,7 +1,7 @@
-CC      = g++
-CFLAGS  = -std=c++11 -O2 -g -Wall -Wextra -Wshadow -pedantic -I/usr/local/cuda/targets/x86_64-linux/include/ -I/usr/local/cuda/samples/common/inc
+CC      := g++
+CFLAGS  := -std=c++11 -O2 -g -Wall -Wextra -Wshadow -pedantic -I/usr/local/cuda/targets/x86_64-linux/include -I/usr/local/cuda/samples/common/inc
 
-LDFLAGS = -L=/usr/local/cuda/targets/x86_64-linux/lib/ -lbenchmark -lm
+LDFLAGS := -L=/usr/local/cuda/targets/x86_64-linux/lib -lbenchmark -lm
 
 all: fftw3-benchmark fftw3f-benchmark fftw3l-benchmark cufftw-benchmark cufftwf-benchmark cufft-single-benchmark cufft-double-benchmark cufft-single-unified-benchmark
 
