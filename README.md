@@ -25,8 +25,8 @@ make
 ./cufft-single-benchmark
 ./cufft-single-unified-benchmark
 ./cufft-double-benchmark
-./cufftw-benchmark
 ./cufftwf-benchmark
+./cufftw-benchmark
 ./fftw3f-benchmark
 ./fftw3-benchmark
 ./fftw3l-benchmark
