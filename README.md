@@ -1,7 +1,8 @@
 # fftw-cufftw-benchmark
 
+Benchmark for popular fft libaries - fftw | cufftw | cufft
 
-## CentOS quickstart
-```
-sudo yum install fftw-devel cuda-nvcc-9-2 cuda-cudart-dev-9-2 cuda-cufft-dev-9-2 benchmark-devel
-```
+## Dependancies
+ * fftw [http://www.fftw.org/]
+ * cuda + cufft/cufftw [https://developer.nvidia.com/cuda-downloads]
+ * benchmark [https://github.com/google/benchmark]
