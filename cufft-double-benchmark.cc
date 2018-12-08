@@ -68,6 +68,6 @@ static void cu_fft_double(benchmark::State& state) {
   state.SetBytesProcessed(static_cast<int64_t>(state.iterations()) * N * sizeof(cufftComplex));
   state.SetComplexityN(N);
 }
-BENCHMARK(cu_fft_double)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity()->UseManualTime();
+BENCHMARK(cu_fft_double)->RangeMultiplier(2)->Range(1<<10, 1<<20)->Complexity()->UseManualTime();
 BENCHMARK_MAIN();
 

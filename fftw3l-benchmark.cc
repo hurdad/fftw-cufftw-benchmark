@@ -60,6 +60,6 @@ static void fftwl(benchmark::State& state) {
   state.SetComplexityN(N);
 
 }
-BENCHMARK(fftwl)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity();
+BENCHMARK(fftwl)->RangeMultiplier(2)->Range(1<<10, 1<<20)->Complexity()->UseManualTime();
 BENCHMARK_MAIN();
 

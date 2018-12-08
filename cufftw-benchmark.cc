@@ -59,6 +59,6 @@ static void cu_fftw(benchmark::State& state) {
   state.SetBytesProcessed(static_cast<int64_t>(state.iterations()) * N * sizeof(fftw_complex));
   state.SetComplexityN(N);
 }
-BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<26)->Complexity()->UseManualTime();
+BENCHMARK(cu_fftw)->RangeMultiplier(2)->Range(1<<10, 1<<20)->Complexity()->UseManualTime();
 BENCHMARK_MAIN();
 
